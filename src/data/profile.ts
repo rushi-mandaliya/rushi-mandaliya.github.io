@@ -119,6 +119,7 @@ export const experience: Job[] = [
     summary:
       'Leading software architecture, engineering and code quality for EBSCO Content Services data pipelines, and guiding the delivery team technically.',
     highlights: [
+      'Built an SDLC AI Factory on Claude Code and its CLI, combining CodeGraph, Repomix and Superpowers plugins with Atlassian, GitHub and Miro MCP servers so AI agents work across Jira, Confluence, repositories and cloud architecture design.',
       'Led the migration of five legacy .NET Framework applications to .NET 10, cutting maintenance overhead by 25%.',
       'Engineered ETL pipelines integrating data from 10+ source systems, improving data freshness by 40% and enabling real-time reporting.',
       'Reduced average ETL job execution time from 45 minutes to under 15 minutes — a 67% improvement.',
@@ -133,7 +134,7 @@ export const experience: Job[] = [
       'Applied Repository and Factory patterns to build a maintainable data-access layer reused across 3 ETL modules.',
       'Led sprint planning, stand-ups and retrospectives, delivering features on time across 10+ sprints.',
     ],
-    tech: ['.NET 10', 'C#', 'Azure Functions', 'AKS', 'AWS', 'GitHub Actions', 'Dapper', 'Oracle', 'NewRelic', 'GitHub Copilot'],
+    tech: ['.NET 10', 'C#', 'Azure Functions', 'AKS', 'AWS', 'GitHub Actions', 'Dapper', 'Oracle', 'NewRelic', 'GitHub Copilot', 'Claude Code'],
   },
   {
     company: 'Shivohm Softtech Pvt. Ltd.',
@@ -191,6 +192,30 @@ export const experience: Job[] = [
 /* ── Projects ───────────────────────────────────────────────────────────── */
 
 export const projects: Project[] = [
+  {
+    title: 'SDLC AI Factory',
+    category: 'professional',
+    featured: true,
+    description:
+      'An AI-driven software delivery factory built on Claude Code and its CLI, extended with plugins and MCP servers so agents work with full codebase context and the team’s own tools.',
+    points: [
+      'CodeGraph and Repomix plugins give agents structural, whole-codebase context',
+      'Superpowers plugin for structured agent workflows',
+      'Atlassian and GitHub MCP servers connect agents to Jira, Confluence and repositories',
+      'Miro MCP for designing cloud and software architecture solutions',
+    ],
+    tech: [
+      'Claude Code',
+      'Claude CLI',
+      'MCP',
+      'CodeGraph',
+      'Repomix',
+      'Superpowers',
+      'Atlassian MCP',
+      'GitHub MCP',
+      'Miro MCP',
+    ],
+  },
   {
     title: 'AI-Powered ETL Assistant',
     category: 'professional',
@@ -328,7 +353,19 @@ export const skills: SkillGroup[] = [
   {
     icon: 'sparkles',
     title: 'AI & LLMs',
-    items: ['GitHub Copilot', 'Azure OpenAI', 'OpenAI API', 'Semantic Kernel', 'RAG', 'AI Agents', 'Prompt Engineering'],
+    items: [
+      'Claude Code',
+      'Claude API',
+      'MCP',
+      'SDLC Factory',
+      'GitHub Copilot',
+      'Azure OpenAI',
+      'OpenAI API',
+      'Semantic Kernel',
+      'RAG',
+      'AI Agents',
+      'Prompt Engineering',
+    ],
   },
   {
     icon: 'database',
