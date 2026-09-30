@@ -1,0 +1,143 @@
+---
+import '../styles/global.css';
+import { profile, seo } from '../data/profile';
+import { fill, withBase } from '../lib/utils';
+
+const title = seo.title;
+const description = fill(seo.description);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role,
+  email: `mailto:${profile.email}`,
+  address: { '@type': 'PostalAddress', addressLocality: profile.location },
+  url: canonical.href,
+  sameAs: profile.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={seo.keywords.join(', ')} />
+    <meta name="author" content={profile.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <meta name="theme-color" content="#06060c" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+    <!-- Apply saved theme before first paint to avoid a flash. Dark is the default look. -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+        try {
+          const saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="backdrop" aria-hidden="true">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+      <div class="blob blob-c"></div>
+      <div class="grid"></div>
+      <div class="noise"></div>
+    </div>
+
+    <slot />
+
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>
+
+<style>
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .blob {
+    position: absolute;
+    width: 60vmax;
+    height: 60vmax;
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .blob-a {
+    top: -30vmax;
+    left: -18vmax;
+    background: radial-gradient(circle, var(--glow-a), transparent 62%);
+    animation: drift-a 26s ease-in-out infinite alternate;
+  }
+
+  .blob-b {
+    top: -12vmax;
+    right: -26vmax;
+    background: radial-gradient(circle, var(--glow-b), transparent 62%);
+    animation: drift-b 32s ease-in-out infinite alternate;
+  }
+
+  .blob-c {
+    bottom: -40vmax;
+    left: 20vw;
+    background: radial-gradient(circle, var(--glow-c), transparent 62%);
+    animation: drift-a 38s ease-in-out infinite alternate-reverse;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  }
+
+  .noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate3d(12vw, 10vh, 0) scale(1.1);
+    }
+  }
+
+  @keyframes drift-b {
+    to {
+      transform: translate3d(-14vw, 16vh, 0) scale(0.92);
+    }
+  }
+</style>

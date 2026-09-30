@@ -1,0 +1,77 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container foot-inner">
+    <p>
+      © {year}
+      {profile.name}. Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>.
+    </p>
+    <ul class="foot-socials">
+      {
+        profile.socials.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              aria-label={s.label}
+              title={s.label}
+              {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              <Icon name={s.icon} size={18} />
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href="#top" aria-label="Back to top" title="Back to top" class="to-top">
+          <Icon name="arrowUp" size={18} />
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding-block: 28px;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+  }
+
+  .foot-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .footer a {
+    transition: color 0.25s var(--ease);
+  }
+
+  .footer a:hover {
+    color: var(--text);
+  }
+
+  p a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .foot-socials {
+    display: flex;
+    gap: 18px;
+  }
+
+  .to-top {
+    color: var(--violet-soft);
+  }
+</style>

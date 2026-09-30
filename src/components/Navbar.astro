@@ -1,0 +1,315 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+
+interface Props {
+  links: { id: string; label: string }[];
+}
+
+const { links } = Astro.props;
+const firstName = profile.name.split(' ')[0];
+---
+
+<header class="nav" data-nav>
+  <div class="container nav-inner">
+    <a href="#top" class="brand" aria-label={`${profile.name} — back to top`}>
+      <span class="brand-mark">{profile.initials}</span>
+      <span class="brand-name">{firstName}<span class="brand-dot">.</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={`#${link.id}`} data-nav-link={link.id}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">
+        <Icon name="sun" class="icon-sun" />
+        <Icon name="moon" class="icon-moon" />
+      </button>
+      <a href="#contact" class="btn btn-primary nav-cta">Let's talk</a>
+      <button
+        class="icon-btn menu-toggle"
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <Icon name="menu" class="icon-open" />
+        <Icon name="x" class="icon-close" />
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <ul class="container">
+      {
+        links.map((link, i) => (
+          <li style={`--i:${i}`}>
+            <a href={`#${link.id}`} data-nav-link={link.id}>
+              <span class="mm-index">{String(i + 1).padStart(2, '0')}</span>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--nav-h);
+    transition:
+      background-color 0.35s var(--ease),
+      border-color 0.35s var(--ease),
+      backdrop-filter 0.35s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav.is-scrolled,
+  .nav.is-open {
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border-bottom-color: var(--border);
+  }
+
+  .nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.15rem;
+  }
+
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    font-size: 0.9rem;
+    letter-spacing: -0.02em;
+    color: #fff;
+    background: var(--gradient-strong);
+    box-shadow: 0 8px 22px -8px rgb(139 92 246 / 0.8);
+    transition: transform 0.4s var(--ease);
+  }
+
+  .brand:hover .brand-mark {
+    transform: rotate(-8deg) scale(1.05);
+  }
+
+  .brand-dot {
+    color: var(--cyan);
+  }
+
+  .nav-links ul {
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 7px 15px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition:
+      color 0.25s var(--ease),
+      background-color 0.25s var(--ease);
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+  }
+
+  .nav-links a.is-active {
+    color: var(--text);
+    background: var(--surface-hover);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-cta {
+    --btn-h: 42px;
+    padding-inline: 18px;
+  }
+
+  /* Theme toggle icon swap */
+  .theme-toggle :global(.icon-sun),
+  :global([data-theme='light']) .theme-toggle :global(.icon-moon) {
+    display: none;
+  }
+
+  :global([data-theme='light']) .theme-toggle :global(.icon-sun) {
+    display: block;
+  }
+
+  /* Mobile */
+  .menu-toggle {
+    display: none;
+  }
+
+  .menu-toggle :global(.icon-close),
+  .nav.is-open .menu-toggle :global(.icon-open) {
+    display: none;
+  }
+
+  .nav.is-open .menu-toggle :global(.icon-close) {
+    display: block;
+  }
+
+  /* Solid: backdrop-filter doesn't apply inside the already-blurred header. */
+  .mobile-menu {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.6);
+  }
+
+  .mobile-menu ul {
+    display: grid;
+    padding-block: 12px 24px;
+  }
+
+  .mobile-menu a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 14px 4px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-menu li {
+    animation: mm-in 0.45s var(--ease) both;
+    animation-delay: calc(var(--i) * 40ms);
+  }
+
+  .mm-index {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--violet-soft);
+  }
+
+  @keyframes mm-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .nav-links,
+    .nav-cta {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: inline-grid;
+    }
+  }
+
+  @media (min-width: 901px) {
+    .mobile-menu {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]')!;
+  const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')!;
+
+  // Glass background once the page scrolls.
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 12);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Theme toggle (persisted).
+  const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const applyThemeMeta = () => {
+    themeMeta?.setAttribute('content', document.documentElement.dataset.theme === 'light' ? '#f6f6fb' : '#06060c');
+  };
+  applyThemeMeta();
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+    applyThemeMeta();
+  });
+
+  // Mobile menu.
+  const setMenu = (open: boolean) => {
+    nav.classList.toggle('is-open', open);
+    menu.hidden = !open;
+    menuToggle.setAttribute('aria-expanded', String(open));
+    menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  menuToggle.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
+  menu.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) setMenu(false);
+  });
+  window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  // Highlight the link for the section currently in view.
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  // 'top' (the hero) has no link, so reaching it clears the highlight.
+  const sections = ['top', ...new Set([...links].map((l) => l.dataset.navLink!))]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => !!el);
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach((l) => l.classList.toggle('is-active', l.dataset.navLink === entry.target.id));
+      }
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
+  );
+  sections.forEach((s) => observer.observe(s));
+</script>

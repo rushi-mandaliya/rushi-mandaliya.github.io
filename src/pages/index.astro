@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import TechMarquee from '../components/TechMarquee.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import Recognition from '../components/Recognition.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { about, certifications, education, experience, projects, recognition, skills } from '../data/profile';
+
+// Sections are numbered and linked in order; a section is skipped when its data is empty.
+const sections = [
+  { id: 'about', label: 'About', component: About, show: about.length > 0 },
+  { id: 'experience', label: 'Experience', component: Experience, show: experience.length > 0 },
+  { id: 'projects', label: 'Projects', component: Projects, show: projects.length > 0 },
+  { id: 'skills', label: 'Skills', component: Skills, show: skills.length > 0 },
+  {
+    id: 'recognition',
+    label: 'Recognition',
+    component: Recognition,
+    show: recognition.length + certifications.length + education.length > 0,
+  },
+  { id: 'contact', label: 'Contact', component: Contact, show: true },
+].filter((s) => s.show);
+---
+
+<BaseLayout>
+  <Navbar links={sections.map(({ id, label }) => ({ id, label }))} />
+  <main id="main">
+    <Hero />
+    <TechMarquee />
+    {sections.map(({ component: Section }, i) => <Section index={i + 1} />)}
+  </main>
+  <Footer />
+</BaseLayout>

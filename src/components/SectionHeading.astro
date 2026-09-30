@@ -1,0 +1,21 @@
+---
+interface Props {
+  index: number;
+  eyebrow: string;
+  title: string;
+  /** Word(s) in the title to render with the gradient. */
+  highlight?: string;
+  lead?: string;
+}
+
+const { index, eyebrow, title, highlight, lead } = Astro.props;
+const [before, after] = highlight && title.includes(highlight) ? title.split(highlight) : [title, undefined];
+---
+
+<header class="section-head" data-reveal>
+  <span class="eyebrow">{String(index).padStart(2, '0')} · {eyebrow}</span>
+  <h2 class="section-title">
+    {before}{after !== undefined && <span class="gradient-text">{highlight}</span>}{after}
+  </h2>
+  {lead && <p class="section-lead">{lead}</p>}
+</header>

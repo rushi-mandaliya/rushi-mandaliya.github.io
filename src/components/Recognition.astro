@@ -1,0 +1,253 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { certifications, education, recognition } from '../data/profile';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+---
+
+<section class="section" id="recognition">
+  <div class="container">
+    <SectionHeading
+      index={index}
+      eyebrow="Recognition"
+      title="Recognized for impact."
+      highlight="impact"
+      lead="Awards from leadership and peers for delivery, AI adoption, values and knowledge sharing."
+    />
+
+    {
+      recognition.length > 0 && (
+        <ul class="awards">
+          {recognition.map((r, i) => (
+            <li class="card card-lift award" data-reveal data-spotlight style={`--delay: ${i * 80}ms`}>
+              <div class="award-top">
+                <span class="icon-medallion">
+                  <Icon name={r.icon} />
+                </span>
+                {r.count && r.count > 1 && <span class="times">×{r.count}</span>}
+              </div>
+              <h3>{r.title}</h3>
+              <p class="issuer">{r.issuer}</p>
+              <p class="desc">{r.description}</p>
+              <p class="date">
+                <Icon name="award" size={14} /> {r.date}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div class="lower">
+      {
+        education.map((e) => (
+          <article class="card edu" data-reveal data-spotlight>
+            <div class="lower-head">
+              <span class="icon-medallion">
+                <Icon name="graduationCap" />
+              </span>
+              <span class="lower-label">Education</span>
+            </div>
+            <h3>{e.degree}</h3>
+            <p class="school">{e.school}</p>
+            <p class="uni">
+              {e.university} · {e.period} · <strong>{e.grade}</strong>
+            </p>
+            {e.coursework.length > 0 && (
+              <ul class="chips">
+                {e.coursework.map((c) => (
+                  <li class="chip chip-neutral">{c}</li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))
+      }
+
+      {
+        certifications.length > 0 && (
+          <article class="card certs" data-reveal data-spotlight style="--delay: 80ms">
+            <div class="lower-head">
+              <span class="icon-medallion">
+                <Icon name="badgeCheck" />
+              </span>
+              <span class="lower-label">Certifications & learning</span>
+            </div>
+            <ul class="cert-list">
+              {certifications.map((c) => (
+                <li>
+                  <span class="cert-title">{c.title}</span>
+                  <span class="cert-meta">
+                    {c.issuer} · {c.date}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .awards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .award {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 26px;
+  }
+
+  .award-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .times {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .award h3 {
+    font-size: 1.2rem;
+  }
+
+  .issuer {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--violet-soft);
+  }
+
+  :global([data-theme='light']) .issuer {
+    color: #6d28d9;
+  }
+
+  .desc {
+    flex: 1;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+
+  .lower {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .edu,
+  .certs {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 28px;
+  }
+
+  .lower-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .lower-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .edu h3 {
+    font-size: 1.35rem;
+  }
+
+  .school {
+    font-weight: 500;
+  }
+
+  .uni {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .uni strong {
+    color: var(--text);
+  }
+
+  .cert-list {
+    display: grid;
+    gap: 4px;
+  }
+
+  .cert-list li {
+    display: grid;
+    gap: 2px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cert-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .cert-title {
+    font-weight: 600;
+  }
+
+  .cert-meta {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1100px) {
+    .awards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .lower {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .awards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,428 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { experience } from '../data/profile';
+import { fill } from '../lib/utils';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+const VISIBLE = 4; // highlights shown before "Show more"
+
+const jobs = experience.map((job) => {
+  const first = job.roles.at(-1)!;
+  const latest = job.roles[0];
+  return {
+    ...job,
+    period: `${first.start} — ${latest.end}`,
+    current: latest.end.toLowerCase() === 'present',
+  };
+});
+---
+
+<section class="section" id="experience">
+  <div class="container">
+    <SectionHeading
+      index={index}
+      eyebrow="Experience"
+      title="Where I've built things."
+      highlight="built"
+      lead="From clinic software to global content pipelines — a career spent making systems faster, cleaner and easier to run."
+    />
+
+    <ol class="timeline">
+      {
+        jobs.map((job, i) => (
+          <li class="tl-item" data-reveal style={`--delay: ${Math.min(i, 2) * 60}ms`}>
+            <div class="tl-when">
+              <span class="tl-period">{job.period}</span>
+              {job.current && <span class="now">Now</span>}
+            </div>
+
+            <span class:list={['tl-node', { current: job.current }]} aria-hidden="true" />
+
+            <article class="card tl-card" data-spotlight data-expandable>
+              <header class="tl-head">
+                <div>
+                  <h3>{job.company}</h3>
+                  <p class="tl-meta">
+                    <span>
+                      <Icon name="mapPin" size={14} /> {job.location}
+                    </span>
+                    {job.client && (
+                      <span>
+                        <Icon name="briefcase" size={14} /> Client: <strong>{job.client}</strong>
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <span class="tl-period-mobile">{job.period}</span>
+              </header>
+
+              <ol class:list={['roles', { path: job.roles.length > 1 }]}>
+                {job.roles.map((role, r) => (
+                  <li class:list={{ latest: r === 0 }}>
+                    <span class="role-title">{role.title}</span>
+                    <span class="role-dates">
+                      {role.start} — {role.end}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+
+              <p class="tl-summary">{fill(job.summary)}</p>
+
+              {job.highlights.length > 0 && (
+                <ul class="tl-highlights">
+                  {job.highlights.map((h, h_i) => (
+                    <li class:list={{ extra: h_i >= VISIBLE }}>{fill(h)}</li>
+                  ))}
+                </ul>
+              )}
+
+              {job.highlights.length > VISIBLE && (
+                <button class="more" type="button" data-expand aria-expanded="false">
+                  <span class="more-label" data-more={`Show ${job.highlights.length - VISIBLE} more`} data-less="Show less">
+                    Show {job.highlights.length - VISIBLE} more
+                  </span>
+                  <Icon name="chevronDown" size={16} />
+                </button>
+              )}
+
+              <ul class="chips tl-tech">
+                {job.tech.map((t) => (
+                  <li class="chip">{t}</li>
+                ))}
+              </ul>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Vertical rail */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 199px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--violet), var(--cyan) 60%, transparent);
+    opacity: 0.5;
+  }
+
+  .tl-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 170px 60px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .tl-when {
+    display: grid;
+    justify-items: end;
+    gap: 8px;
+    padding-top: 26px;
+    text-align: right;
+  }
+
+  .tl-period {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .now {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 999px;
+    color: #34d399;
+    background: rgb(52 211 153 / 0.1);
+    border: 1px solid rgb(52 211 153 / 0.3);
+  }
+
+  .tl-node {
+    justify-self: center;
+    margin-top: 29px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--violet);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--violet) 15%, transparent);
+    z-index: 1;
+  }
+
+  .tl-node.current {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow:
+      0 0 0 5px rgb(34 211 238 / 0.18),
+      0 0 22px rgb(34 211 238 / 0.7);
+  }
+
+  .tl-card {
+    display: grid;
+    gap: 18px;
+    padding: clamp(22px, 3vw, 30px);
+  }
+
+  .tl-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .tl-head h3 {
+    font-size: 1.45rem;
+  }
+
+  .tl-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+  }
+
+  .tl-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tl-meta strong {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .tl-period-mobile {
+    display: none;
+  }
+
+  /* Roles / promotion path */
+  .roles {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .roles li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+  }
+
+  .role-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .roles .latest .role-title {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .role-dates {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+
+  .roles.path {
+    position: relative;
+    padding-left: 22px;
+  }
+
+  .roles.path::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(var(--cyan), var(--violet));
+  }
+
+  .roles.path li {
+    position: relative;
+  }
+
+  .roles.path li::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 0.5em;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--violet);
+  }
+
+  .roles.path li.latest::before {
+    border-color: var(--cyan);
+    background: var(--cyan);
+  }
+
+  .tl-summary {
+    color: var(--text-muted);
+  }
+
+  .tl-highlights {
+    display: grid;
+    gap: 10px;
+  }
+
+  .tl-highlights li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .tl-highlights li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--gradient-strong);
+    transform: rotate(45deg);
+  }
+
+  :global(.js) .tl-highlights .extra {
+    display: none;
+  }
+
+  :global(.js) .is-expanded .tl-highlights .extra {
+    display: block;
+    animation: fade-in 0.4s var(--ease) both;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  .more {
+    display: none;
+    justify-self: start;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    transition:
+      border-color 0.25s var(--ease),
+      background-color 0.25s var(--ease);
+  }
+
+  :global(.js) .more {
+    display: inline-flex;
+  }
+
+  .more:hover {
+    border-color: var(--violet);
+    background: var(--surface-hover);
+  }
+
+  .more :global(svg) {
+    transition: transform 0.3s var(--ease);
+  }
+
+  .is-expanded .more :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .tl-tech {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 860px) {
+    .timeline::before {
+      left: 6px;
+    }
+
+    .tl-item {
+      grid-template-columns: 28px minmax(0, 1fr);
+    }
+
+    .tl-when {
+      display: none;
+    }
+
+    .tl-node {
+      justify-self: start;
+      margin-top: 30px;
+    }
+
+    .tl-period-mobile {
+      display: block;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      padding-top: 6px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .tl-head {
+      flex-direction: column-reverse;
+      gap: 6px;
+    }
+
+    .tl-period-mobile {
+      padding-top: 0;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-expand]').forEach((btn) => {
+    const card = btn.closest<HTMLElement>('[data-expandable]')!;
+    const label = btn.querySelector<HTMLElement>('.more-label')!;
+    btn.addEventListener('click', () => {
+      const expanded = card.classList.toggle('is-expanded');
+      btn.setAttribute('aria-expanded', String(expanded));
+      label.textContent = expanded ? label.dataset.less! : label.dataset.more!;
+    });
+  });
+</script>

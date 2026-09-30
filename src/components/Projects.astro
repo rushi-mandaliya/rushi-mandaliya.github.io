@@ -1,0 +1,374 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { projects } from '../data/profile';
+import { fill, hostname } from '../lib/utils';
+import type { ProjectCategory } from '../data/types';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+
+const sorted = [...projects].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+
+const categoryLabels: Record<ProjectCategory, string> = {
+  professional: 'Professional',
+  personal: 'Personal',
+};
+const categories = (Object.keys(categoryLabels) as ProjectCategory[])
+  .map((key) => ({ key, label: categoryLabels[key], count: projects.filter((p) => p.category === key).length }))
+  .filter((c) => c.count > 0);
+---
+
+<section class="section" id="projects">
+  <div class="container">
+    <SectionHeading
+      index={index}
+      eyebrow="Projects"
+      title="Selected work & side quests."
+      highlight="side quests"
+      lead="Client platforms I've helped build, plus the trading systems I engineer in my own time."
+    />
+
+    {
+      categories.length > 1 && (
+        <div class="filters" role="group" aria-label="Filter projects" data-reveal>
+          <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">
+            All <span>{projects.length}</span>
+          </button>
+          {categories.map((c) => (
+            <button type="button" class="filter" data-filter={c.key} aria-pressed="false">
+              {c.label} <span>{c.count}</span>
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <ul class="grid" data-project-grid>
+      {
+        sorted.map((p, i) => (
+          <li
+            class:list={['card', 'card-lift', 'project', { featured: p.featured, 'gradient-border': p.featured }]}
+            data-category={p.category}
+            data-reveal
+            data-spotlight
+            style={`--delay: ${(i % 3) * 80}ms`}
+          >
+            <div class="p-top">
+              <span class:list={['p-cat', p.category]}>
+                <Icon name={p.category === 'personal' ? 'chartLine' : 'briefcase'} size={14} />
+                {categoryLabels[p.category]}
+              </span>
+              {p.featured && (
+                <span class="p-featured">
+                  <Icon name="star" size={12} /> Featured
+                </span>
+              )}
+              {p.period && <span class="p-period">{p.period}</span>}
+            </div>
+
+            <h3>
+              {p.link ? (
+                <a href={p.link} target="_blank" rel="noopener noreferrer" class="p-link">
+                  {p.title}
+                  <Icon name="arrowUpRight" size={18} />
+                </a>
+              ) : (
+                p.title
+              )}
+            </h3>
+
+            <p class="p-desc">{fill(p.description)}</p>
+
+            {p.metric && (
+              <p class="p-metric">
+                <Icon name="chartLine" size={16} />
+                <span>{p.metric}</span>
+              </p>
+            )}
+
+            {p.points && p.points.length > 0 && (
+              <ul class="p-points">
+                {p.points.map((pt) => (
+                  <li>{fill(pt)}</li>
+                ))}
+              </ul>
+            )}
+
+            <div class="p-foot">
+              <ul class="chips">
+                {p.tech.map((t) => (
+                  <li class="chip chip-neutral">{t}</li>
+                ))}
+              </ul>
+              {p.link && <span class="p-host">{hostname(p.link)}</span>}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .filters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
+    margin-bottom: 32px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+  }
+
+  .filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition:
+      color 0.25s var(--ease),
+      background 0.25s var(--ease);
+  }
+
+  .filter span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: var(--surface-hover);
+    color: var(--text-dim);
+  }
+
+  .filter:hover {
+    color: var(--text);
+  }
+
+  .filter.is-active {
+    color: #fff;
+    background: var(--gradient-strong);
+  }
+
+  .filter.is-active span {
+    color: #fff;
+    background: rgb(255 255 255 / 0.2);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 26px;
+  }
+
+  .project[hidden] {
+    display: none;
+  }
+
+  .project.featured {
+    border-color: transparent;
+  }
+
+  .p-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .p-cat,
+  .p-featured {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+  }
+
+  .p-cat {
+    color: var(--chip-text);
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+  }
+
+  .p-cat.personal {
+    color: #67e8f9;
+    background: rgb(34 211 238 / 0.08);
+    border-color: rgb(34 211 238 / 0.25);
+  }
+
+  :global([data-theme='light']) .p-cat.personal {
+    color: #0e7490;
+  }
+
+  .p-featured {
+    color: #fcd34d;
+    background: rgb(252 211 77 / 0.08);
+    border: 1px solid rgb(252 211 77 / 0.25);
+  }
+
+  :global([data-theme='light']) .p-featured {
+    color: #b45309;
+  }
+
+  .p-period {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-dim);
+  }
+
+  .project h3 {
+    font-size: 1.3rem;
+    margin-top: 4px;
+  }
+
+  .p-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.25s var(--ease);
+  }
+
+  .p-link :global(svg) {
+    color: var(--text-dim);
+    transition:
+      transform 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+
+  .p-link:hover :global(svg) {
+    color: var(--cyan);
+    transform: translate(2px, -2px);
+  }
+
+  /* Make the whole card clickable when it has a link */
+  .p-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .p-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .p-metric {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--cyan) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+  }
+
+  .p-metric :global(svg) {
+    color: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .p-metric span {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .p-points {
+    display: grid;
+    gap: 6px;
+  }
+
+  .p-points li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .p-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--violet-soft);
+  }
+
+  .p-foot {
+    display: grid;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .p-host {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filters {
+      display: flex;
+      border-radius: 18px;
+    }
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-project-grid] > [data-category]');
+
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.hidden = !show;
+        if (show) {
+          card.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], {
+            duration: 450,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          });
+        }
+      });
+    }),
+  );
+</script>

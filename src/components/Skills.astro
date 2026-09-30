@@ -1,0 +1,93 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { skills } from '../data/profile';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+---
+
+<section class="section" id="skills">
+  <div class="container">
+    <SectionHeading
+      index={index}
+      eyebrow="Skills"
+      title="The toolkit."
+      highlight="toolkit"
+      lead="What I reach for to design, build, ship and run production systems."
+    />
+
+    <ul class="skills">
+      {
+        skills.map((group, i) => (
+          <li
+            class="card skill"
+            data-reveal
+            data-spotlight
+            style={`--delay: ${(i % 3) * 80}ms`}
+          >
+            <div class="skill-head">
+              <span class="icon-medallion">
+                <Icon name={group.icon} />
+              </span>
+              <h3>{group.title}</h3>
+              <span class="count">{String(group.items.length).padStart(2, '0')}</span>
+            </div>
+            <ul class="chips">
+              {group.items.map((item) => (
+                <li class="chip">{item}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Masonry columns stay balanced however many groups/items you add. */
+  .skills {
+    columns: 3 300px;
+    column-gap: 18px;
+  }
+
+  .skill {
+    display: grid;
+    gap: 20px;
+    padding: 26px;
+    margin-bottom: 18px;
+    break-inside: avoid;
+  }
+
+  .skill-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .skill-head h3 {
+    font-size: 1.2rem;
+  }
+
+  .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  .chip {
+    transition:
+      transform 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .chip:hover {
+    transform: translateY(-2px);
+    border-color: var(--violet);
+  }
+</style>

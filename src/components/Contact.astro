@@ -1,0 +1,167 @@
+---
+import Icon from './Icon.astro';
+import { contact, profile } from '../data/profile';
+import { fill, withBase } from '../lib/utils';
+
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+const linkedin = profile.socials.find((s) => s.icon === 'linkedin');
+---
+
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="panel gradient-border" data-reveal>
+      <div class="panel-glow" aria-hidden="true"></div>
+      <span class="eyebrow">{String(index).padStart(2, '0')} · Contact</span>
+      <h2>{fill(contact.heading)}</h2>
+      <p class="body">{fill(contact.body)}</p>
+
+      <div class="actions">
+        <a href={`mailto:${profile.email}`} class="btn btn-primary">
+          <Icon name="mail" /> Say hello
+        </a>
+        <button type="button" class="btn btn-ghost copy" data-copy={profile.email}>
+          <Icon name="copy" class="i-copy" />
+          <Icon name="check" class="i-check" />
+          <span data-copy-label>{profile.email}</span>
+        </button>
+        {
+          linkedin && (
+            <a href={linkedin.href} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+              <Icon name="linkedin" /> LinkedIn
+            </a>
+          )
+        }
+        {
+          profile.resumeUrl && (
+            <a href={withBase(profile.resumeUrl)} class="btn btn-ghost" download>
+              <Icon name="download" /> Download CV
+            </a>
+          )
+        }
+      </div>
+
+      <p class="where"><Icon name="mapPin" size={15} /> Based in {profile.location}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-top: clamp(24px, 4vw, 48px);
+  }
+
+  .panel {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 22px;
+    padding: clamp(48px, 8vw, 96px) clamp(24px, 6vw, 80px);
+    text-align: center;
+    border-radius: 32px;
+    overflow: hidden;
+    isolation: isolate;
+    --border-gradient: linear-gradient(135deg, var(--violet), transparent 40%, transparent 60%, var(--cyan));
+    background: color-mix(in srgb, var(--bg-elev) 70%, transparent);
+  }
+
+  .panel-glow {
+    position: absolute;
+    inset: -40% -10% auto;
+    height: 120%;
+    z-index: -1;
+    background:
+      radial-gradient(closest-side at 30% 50%, var(--glow-a), transparent),
+      radial-gradient(closest-side at 70% 50%, var(--glow-b), transparent);
+    opacity: 0.8;
+    animation: breathe 9s ease-in-out infinite alternate;
+  }
+
+  @keyframes breathe {
+    to {
+      transform: scale(1.12) translateY(6%);
+      opacity: 1;
+    }
+  }
+
+  h2 {
+    max-width: 14ch;
+    font-size: clamp(2.3rem, 6vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+
+  .body {
+    max-width: 560px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .copy :global(.i-check) {
+    display: none;
+    color: #34d399;
+  }
+
+  .copy.is-copied :global(.i-check) {
+    display: block;
+  }
+
+  .copy.is-copied :global(.i-copy) {
+    display: none;
+  }
+
+  .where {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 560px) {
+    .copy {
+      max-width: 100%;
+    }
+
+    .copy span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+    const original = label.textContent;
+    let timer: ReturnType<typeof setTimeout>;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        btn.classList.add('is-copied');
+        label.textContent = 'Copied to clipboard';
+      } catch {
+        window.location.href = `mailto:${btn.dataset.copy}`;
+        return;
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        btn.classList.remove('is-copied');
+        label.textContent = original;
+      }, 2000);
+    });
+  });
+</script>
