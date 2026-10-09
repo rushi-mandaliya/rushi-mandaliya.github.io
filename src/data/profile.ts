@@ -28,16 +28,16 @@ import type {
 export const profile: Profile = {
   name: 'Rushikumar Mandaliya',
   initials: 'RM',
-  role: 'Senior .NET Software Engineer',
+  role: 'Senior Backend Engineer',
   status: 'Key Engineer at EPAM Systems',
   typewriter: [
-    'scalable .NET backends',
+    'scalable backend services',
+    'event-driven microservices',
     'high-throughput ETL pipelines',
-    'cloud-native microservices',
     'AI-powered developer tools',
   ],
   tagline:
-    'I design and ship high-performance backends, data pipelines and AI-assisted tooling for enterprise teams — taking legacy .NET Framework systems to cloud-native .NET 10.',
+    'I design and ship high-performance backend services, data pipelines and AI-assisted tooling for enterprise teams — and migrate legacy systems to cloud-native microservices.',
   location: 'Gandhinagar, Gujarat, India',
   email: 'rushi.mandaliya@gmail.com',
   careerStart: '2018-09',
@@ -48,16 +48,16 @@ export const profile: Profile = {
     { label: 'Email', href: 'mailto:rushi.mandaliya@gmail.com', icon: 'mail' },
   ],
   heroCode: {
-    stack: ['.NET 10', 'C#', 'Azure', 'AWS', 'Kubernetes'],
-    focus: ['ETL', 'Microservices', 'GenAI'],
+    stack: ['C#', '.NET 10', 'Go', 'AWS', 'Azure', 'Kubernetes'],
+    focus: ['Microservices', 'ETL', 'GenAI'],
   },
 };
 
 export const seo: Seo = {
-  title: 'Rushikumar Mandaliya — Senior .NET Software Engineer',
+  title: 'Rushikumar Mandaliya — Senior Backend Engineer',
   description:
-    'Senior .NET Software Engineer with {years}+ years building scalable backends, ETL pipelines, cloud-native microservices and AI-integrated applications.',
-  keywords: ['.NET', 'C#', 'ASP.NET Core', 'Azure', 'AWS', 'ETL', 'Microservices', 'GenAI', 'Software Engineer'],
+    'Senior Backend Engineer with {years}+ years building scalable backend services, event-driven microservices, ETL pipelines and AI-integrated applications.',
+  keywords: ['Backend Engineer', '.NET', 'C#', 'Go', 'Kafka', 'PostgreSQL', 'MongoDB', 'Redis', 'Azure', 'AWS', 'ETL', 'Microservices', 'GenAI'],
 };
 
 /* ── Hero stats (animated counters) ─────────────────────────────────────── */
@@ -73,7 +73,7 @@ export const stats: Stat[] = [
 /* ── About ──────────────────────────────────────────────────────────────── */
 
 export const about: string[] = [
-  "I'm a Senior .NET Software Engineer with {years}+ years of experience building high-performance backends, ETL pipelines and AI-integrated applications for enterprise teams across healthcare, insurance, finance and academic publishing.",
+  "I'm a Senior Backend Engineer with {years}+ years of experience building high-performance backend services, event-driven microservices, ETL pipelines and AI-integrated applications for enterprise teams across healthcare, insurance, finance and academic publishing.",
   'Today I work as a Key Engineer at EPAM Systems for EBSCO, where I lead software architecture, engineering and code quality for Content Services data-ingestion and transformation pipelines — and provide technical guidance to the delivery team.',
   "I care about clean architecture, SOLID design, TDD and observability. I'm also an early adopter of AI-assisted engineering: I build custom GitHub Copilot agents, prompt libraries and RAG-based tools that make teams measurably faster.",
 ];
@@ -87,9 +87,9 @@ export const highlights: Highlight[] = [
   },
   {
     icon: 'layers',
-    title: '.NET backend & full-stack',
-    body: 'Backend and full-stack development, legacy modernization, REST APIs and microservices — from .NET Framework to .NET 10.',
-    tags: ['.NET', 'C#', 'ASP.NET Core', 'REST APIs'],
+    title: 'Backend & microservices',
+    body: 'Backend services, event-driven microservices, REST APIs and legacy modernization — mainly in C#/.NET, with Go for concurrent workloads.',
+    tags: ['C#', '.NET', 'Go', 'Kafka', 'REST APIs'],
   },
   {
     icon: 'cloud',
@@ -134,7 +134,7 @@ export const experience: Job[] = [
       'Applied Repository and Factory patterns to build a maintainable data-access layer reused across 3 ETL modules.',
       'Led sprint planning, stand-ups and retrospectives, delivering features on time across 10+ sprints.',
     ],
-    tech: ['.NET 10', 'C#', 'Azure Functions', 'AKS', 'AWS', 'GitHub Actions', 'Dapper', 'Oracle', 'NewRelic', 'GitHub Copilot', 'Claude Code'],
+    tech: ['.NET 10', 'C#', 'Azure Functions', 'AKS', 'Docker', 'Terraform', 'AWS', 'GitHub Actions', 'Dapper', 'Oracle', 'MongoDB', 'NewRelic', 'GitHub Copilot', 'Claude Code'],
   },
   {
     company: 'Shivohm Softtech Pvt. Ltd.',
@@ -235,7 +235,7 @@ export const projects: Project[] = [
       'A microservices architecture that distributes educational and medical content to 200+ universities and archives worldwide. Led backend development integrating Oracle and MSSQL.',
     metric: '30% lower content-retrieval latency',
     points: ['Kubernetes orchestration improved deployment scalability by 40%'],
-    tech: ['.NET 8', 'C#', 'Oracle', 'MSSQL', 'Kubernetes', 'Docker', 'Python', 'Perl'],
+    tech: ['.NET 8', 'C#', 'Oracle', 'MSSQL', 'MongoDB', 'Kubernetes', 'Docker', 'Python', 'Perl'],
   },
   {
     title: 'Options Trading Strategy Platform',
@@ -257,6 +257,25 @@ export const projects: Project[] = [
       'A research application for testing equity-trading strategies, with custom Claude skills and plugins that iterate on and stress-test strategy modules.',
     points: ['AI-driven iteration loop for strategy modules'],
     tech: ['Python', 'NumPy', 'pandas', 'APScheduler', 'Claude'],
+  },
+  {
+    title: 'Concurrent XML Comparator',
+    category: 'personal',
+    description:
+      'A tool that compares multiple XML data files in parallel, built in Go to evaluate its concurrency and parallelism model.',
+    points: [
+      'Goroutines and channels compare several files at once across CPU cores',
+      'The Go version used less memory than an equivalent implementation for the same workload',
+    ],
+    tech: ['Go', 'Goroutines', 'XML'],
+  },
+  {
+    title: 'Health Insurance Microservices',
+    category: 'personal',
+    description:
+      'Event-driven microservices for a health-insurance provider, covering claims and eligibility, with services communicating asynchronously through Apache Kafka.',
+    points: ['Separate claims and eligibility services publish and consume domain events over Kafka'],
+    tech: ['C#', '.NET', 'Apache Kafka', 'SQL Server', 'MongoDB', 'Microservices'],
   },
   {
     title: 'Redirect Health Platform',
@@ -314,8 +333,13 @@ export const marquee: string[] = [
   'Semantic Kernel',
   'Azure OpenAI',
   'SQL Server',
+  'PostgreSQL',
+  'MongoDB',
+  'Redis',
   'Oracle',
   'Python',
+  'Go',
+  'Kafka',
   'Angular',
 ];
 
@@ -323,12 +347,12 @@ export const skills: SkillGroup[] = [
   {
     icon: 'code',
     title: 'Languages',
-    items: ['C#', 'SQL', 'Python', 'JavaScript', 'Perl', 'C++', 'C'],
+    items: ['C#', 'SQL', 'Python', 'Go', 'JavaScript', 'Perl', 'C++', 'C'],
   },
   {
     icon: 'layers',
     title: 'Frameworks',
-    items: ['.NET 10', '.NET 8', '.NET Core', 'ASP.NET Core', 'Entity Framework Core', 'Dapper', 'ADO.NET', 'Angular', 'WPF'],
+    items: ['.NET 10', '.NET 8', '.NET Core', 'ASP.NET Core', 'Entity Framework Core', 'Dapper', 'ADO.NET', 'Frappe', 'Angular', 'WPF'],
   },
   {
     icon: 'cloud',
@@ -342,11 +366,13 @@ export const skills: SkillGroup[] = [
       'Terraform',
       'GitHub Actions',
       'Azure DevOps',
+      'AWS EC2',
       'AWS Lambda',
       'AWS ECS',
       'AWS Step Functions',
       'AWS S3',
       'AWS CloudFormation',
+      'AWS CodeBuild',
       'NewRelic',
     ],
   },
@@ -369,8 +395,8 @@ export const skills: SkillGroup[] = [
   },
   {
     icon: 'database',
-    title: 'Databases',
-    items: ['SQL Server', 'Oracle', 'MySQL', 'MariaDB'],
+    title: 'Data & messaging',
+    items: ['SQL Server', 'PostgreSQL', 'Oracle', 'MongoDB', 'Redis', 'MySQL', 'MariaDB', 'Apache Kafka'],
   },
   {
     icon: 'gitBranch',
@@ -434,5 +460,5 @@ export const education: Education[] = [
 
 export const contact: Contact = {
   heading: "Let's build something reliable.",
-  body: "Modernizing a legacy .NET system, designing a data pipeline or bringing AI into your engineering workflow — I'd love to hear about it.",
+  body: "Modernizing a legacy system, designing a data pipeline or bringing AI into your engineering workflow — I'd love to hear about it.",
 };
