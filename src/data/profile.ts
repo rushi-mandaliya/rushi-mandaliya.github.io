@@ -247,16 +247,21 @@ export const projects: Project[] = [
       'Position, risk and order management systems built from the ground up',
       'Generates edge cases to stress-test strategies and reports scenario outcomes',
       'Real-time indicator computation feeding live trading decisions',
+      'Measures strategy performance with returns, drawdown, Sharpe ratio and correlations, comparing backtest results across time periods',
+      'Historical data stored in Parquet, with Redis caching to speed up backtests across parameter sweeps',
     ],
-    tech: ['Python', 'NumPy', 'pandas', 'APScheduler', 'REST APIs'],
+    tech: ['Python', 'NumPy', 'pandas', 'Parquet', 'Redis', 'APScheduler', 'REST APIs', 'Backtesting'],
   },
   {
     title: 'Equity Strategy Research Lab',
     category: 'personal',
     description:
       'A research application for testing equity-trading strategies, with custom Claude skills and plugins that iterate on and stress-test strategy modules.',
-    points: ['AI-driven iteration loop for strategy modules'],
-    tech: ['Python', 'NumPy', 'pandas', 'APScheduler', 'Claude'],
+    points: [
+      'AI-driven iteration loop for strategy modules',
+      'Evaluates strategies by returns, drawdown, Sharpe ratio and correlations across backtest time periods',
+    ],
+    tech: ['Python', 'NumPy', 'pandas', 'APScheduler', 'Backtesting', 'Claude'],
   },
   {
     title: 'Concurrent XML Comparator',
@@ -396,12 +401,12 @@ export const skills: SkillGroup[] = [
   {
     icon: 'database',
     title: 'Data & messaging',
-    items: ['SQL Server', 'PostgreSQL', 'Oracle', 'MongoDB', 'Redis', 'MySQL', 'MariaDB', 'Apache Kafka'],
+    items: ['SQL Server', 'PostgreSQL', 'Oracle', 'MongoDB', 'Redis', 'MySQL', 'MariaDB', 'Parquet', 'Apache Kafka'],
   },
   {
     icon: 'gitBranch',
     title: 'Practices',
-    items: ['Microservices', 'RESTful APIs', 'TDD / xUnit', 'SOLID', 'CQRS', 'Repository & Factory', 'Agile / Scrum'],
+    items: ['Microservices', 'RESTful APIs', 'TDD / xUnit', 'SOLID', 'CQRS', 'Repository & Factory', 'Backtesting & performance analysis', 'Agile / Scrum'],
   },
 ];
 
